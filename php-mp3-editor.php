@@ -11,10 +11,10 @@ class mp3editor
     {
         $getID3 = new getID3;
         $audiofile = $getID3->analyze($path);
-        echo json_encode($audiofile);
         $tag = $audiofile['tags']['id3v2'];
         if (!$tag) $tag = array('comments' => array());
         foreach ($tag as $k => $v) $tag[$k] = $v[0];
+        if (isset($audiofile['comments']['picture'][0]['data'])) $tag['cover'] = $audiofile['comments']['picture'][0]['data'];
         return $tag;
     }
     function cover(string $path, string $saveto = 'null')
@@ -22,7 +22,7 @@ class mp3editor
         $getID3 = new getID3;
         $audiofile = $getID3->analyze($path);
         $x = false;
-        if (isset($audiofile['comments']['picture'][0]['data'])) $x = $audiofile['comments']['picture'][0];
+        if (isset($audiofile['comments']['picture'][0]['data'])) $x = $audiofile['comments']['picture'][0]['data'];
         if ($x != false) if ($saveto != 'null') file_put_contents($saveto, $x);
         return $x;
     }
