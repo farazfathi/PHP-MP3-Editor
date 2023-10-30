@@ -16,16 +16,16 @@ class mp3editor
         foreach ($tag as $k => $v) $tag[$k] = $v[0];
         return $tag;
     }
-    function cover(string $path, string|false $saveto = false)
+    function cover(string $path, string $saveto = 'null')
     {
         $getID3 = new getID3;
         $audiofile = $getID3->analyze($path);
         $x = false;
         if (isset($audiofile['comments']['picture'][0]['data'])) $x = $audiofile['comments']['picture'][0];
-        if ($x != false) if ($saveto != false) file_put_contents($saveto, $x);
+        if ($x != false) if ($saveto != 'null') file_put_contents($saveto, $x);
         return $x;
     }
-    function tagEdit(string $file, array $data)
+    function tagEdit(string $file, array $data) 
     {
         $getID3 = new getID3;
         $audiofile = $getID3->analyze($file);
@@ -54,9 +54,9 @@ class mp3editor
         $tagwriter->tag_data = $tag;
         $tagwriter->WriteTags();
     }
-    function trim(string $path, int $offset, int $l, string|false $to = false)
+    function trim(string $path, int $offset, int $l, string $to = 'null')
     {
-        if (!$to) $to = $path;
+        if ($to != 'null') $to = $path;
         $mp3 = new PHPMP3($path);
         $mp3_1 = $mp3->extract($offset, $l);
         $mp3_1->save($to);
