@@ -11,9 +11,11 @@ class mp3editor
     {
         $getID3 = new getID3;
         $audiofile = $getID3->analyze($path);
+        $br = round(intval($audiofile['bitrate'])/1000);
         $tag = $audiofile['tags']['id3v2'];
         if (!$tag) $tag = array('comments' => array());
         foreach ($tag as $k => $v) $tag[$k] = $v[0];
+        $tag['bitrate'] = $br;
         if (isset($audiofile['comments']['picture'][0]['data'])) $tag['cover'] = $audiofile['comments']['picture'][0]['data'];
         return $tag;
     }
